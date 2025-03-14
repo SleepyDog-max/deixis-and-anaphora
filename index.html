@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deixis and Expressions Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 700px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .question {
+            display: none;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 8px;
+        }
+        .question.active {
+            display: block;
+        }
+        .question h3 {
+            color: #2980b9;
+            margin-top: 0;
+        }
+        label {
+            display: block;
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        label:hover {
+            background: #dfe6e9;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        button:hover:not(:disabled) {
+            background-color: #219653;
+        }
+        #restart {
+            background-color: #e74c3c;
+        }
+        #restart:hover {
+            background-color: #c0392b;
+        }
+        #summary {
+            display: none;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .correct { color: #27ae60; }
+        .incorrect { color: #e74c3c; }
+        #motivation {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+            font-size: 16px;
+            animation: fadeOut 2s forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Deixis, Anaphora, and Expressions</h1>
+        <div id="motivation">Yay, you are amazing!</div>
+        <form id="quizForm">
+            <div class="question" data-index="0">
+                <h3>1. True or False: The word "this" in "This is my book" is always a deictic expression because it depends on the speaker’s context.</h3>
+                <label><input type="radio" name="q1" value="true"> True</label>
+                <label><input type="radio" name="q1" value="false"> False</label>
+            </div>
+            <div class="question" data-index="1">
+                <h3>2. True or False: In the sentence "Mary lost a pen, and she found it later," the word "it" is an indefinite expression.</h3>
+                <label><input type="radio" name="q2" value="true"> True</label>
+                <label><input type="radio" name="q2" value="false"> False</label>
+            </div>
+            <div class="question" data-index="2">
+                <h3>3. Which of the following is an example of an anaphoric expression?</h3>
+                <label><input type="radio" name="q3" value="a"> a) Here, take this</label>
+                <label><input type="radio" name="q3" value="b"> b) The tall man walked in</label>
+                <label><input type="radio" name="q3" value="c"> c) John bought a car, and he drove it home</label>
+                <label><input type="radio" name="q3" value="d"> d) Someone left a note</label>
+            </div>
+            <div class="question" data-index="3">
+                <h3>4. Which of these expressions is both definite and deictic?</h3>
+                <label><input type="radio" name="q4" value="a"> a) The cat</label>
+                <label><input type="radio" name="q4" value="b"> b) That dog over there</label>
+                <label><input type="radio" name="q4" value="c"> c) A bird in the tree</label>
+                <label><input type="radio" name="q4" value="d"> d) My friend’s house</label>
+            </div>
+            <div class="question" data-index="4">
+                <h3>5. In the sentence "Some students arrived late, and the teacher scolded those who did," which of the following correctly identifies the role of "those who did"?</h3>
+                <label><input type="radio" name="q5" value="a"> a) It’s an indefinite expression introducing new students.</label>
+                <label><input type="radio" name="q5" value="b"> b) It’s a definite, anaphoric expression referring to all students.</label>
+                <label><input type="radio" name="q5" value="c"> c) It’s a definite, anaphoric expression referring to a subset of the students.</label>
+                <label><input type="radio" name="q5" value="d"> d) It’s a deictic expression relying on the speaker’s immediate context.</label>
+            </div>
+            <div class="navigation">
+                <button type="button" id="prev" onclick="prevQuestion()" disabled>Previous</button>
+                <button type="button" id="next" onclick="nextQuestion()">Next</button>
+                <button type="button" id="submit" onclick="submitQuiz()" style="display: none;">Submit</button>
+            </div>
+        </form>
+        <div id="summary">
+            <h2>Quiz Summary</h2>
+            <p>Total Score: <span id="score"></span>/5</p>
+            <div id="explanations"></div>
+            <button id="restart" onclick="restartQuiz()">Restart</button>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'true',
+            q2: 'false',
+            q3: 'c',
+            q4: 'b',
+            q5: 'c'
+        };
+
+        const explanations = {
+            q1: 'The word "this" in "This is my book" is a deictic expression because its meaning depends on the speaker’s context—e.g., which book they’re indicating.',
+            q2: 'In "Mary lost a pen, and she found it later," "it" is not indefinite. It’s an anaphoric expression referring back to the specific pen introduced by "a pen."',
+            q3: '"It" in "John bought a car, and he drove it home" is anaphoric because it refers back to "a car" mentioned earlier.',
+            q4: '"That dog over there" is both definite (specifying a particular dog) and deictic (depending on the speaker’s context, like pointing).',
+            q5: '"Those who did" is a definite, anaphoric expression referring to the subset of students who arrived late, not all students or a deictic reference.'
+        };
+
+        let currentQuestion = 0;
+        const questions = document.querySelectorAll('.question');
+        const prevButton = document.getElementById('prev');
+        const nextButton = document.getElementById('next');
+        const submitButton = document.getElementById('submit');
+        const motivation = document.getElementById('motivation');
+
+        function showQuestion(index) {
+            questions.forEach(q => q.classList.remove('active'));
+            questions[index].classList.add('active');
+            prevButton.disabled = index === 0;
+            nextButton.style.display = index === questions.length - 1 ? 'none' : 'inline';
+            submitButton.style.display = index === questions.length - 1 ? 'inline' : 'none';
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function showMotivation() {
+            motivation.style.display = 'block';
+            setTimeout(() => {
+                motivation.style.display = 'none';
+            }, 2000); // Hide after 2 seconds
+        }
+
+        function checkAnswer(event) {
+            const input = event.target;
+            if (input.type === 'radio') {
+                const questionNum = input.name.slice(1); // e.g., "q1" -> "1"
+                const correctAnswer = correctAnswers[`q${questionNum}`];
+                if (input.value === correctAnswer) {
+                    showMotivation();
+                }
+            }
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            const form = document.getElementById('quizForm');
+            const summary = document.getElementById('summary');
+            const explanationsDiv = document.getElementById('explanations');
+            explanationsDiv.innerHTML = '';
+
+            for (let i = 1; i <= 5; i++) {
+                const userAnswer = form.querySelector(`input[name="q${i}"]:checked`);
+                const correctAnswer = correctAnswers[`q${i}`];
+                const explanation = explanations[`q${i}`];
+                let result = '';
+
+                if (userAnswer && userAnswer.value === correctAnswer) {
+                    score++;
+                    result = `<span class="correct">Correct</span>`;
+                } else {
+                    result = `<span class="incorrect">Incorrect</span>`;
+                }
+
+                explanationsDiv.innerHTML += `
+                    <h3>Question ${i}</h3>
+                    <p>${result} - Your answer: ${userAnswer ? userAnswer.value : 'None'}</p>
+                    <p>Correct answer: ${correctAnswer}</p>
+                    <p>${explanation}</p>
+                `;
+            }
+
+            document.getElementById('score').textContent = score;
+            form.style.display = 'none';
+            summary.style.display = 'block';
+        }
+
+        function restartQuiz() {
+            const form = document.getElementById('quizForm');
+            const summary = document.getElementById('summary');
+            form.reset();
+            currentQuestion = 0;
+            showQuestion(currentQuestion);
+            form.style.display = 'block';
+            summary.style.display = 'none';
+        }
+
+        // Add event listener for radio button clicks
+        document.getElementById('quizForm').addEventListener('change', checkAnswer);
+
+        // Initialize the first question
+        showQuestion(currentQuestion);
+    </script>
+</body>
+</html>
